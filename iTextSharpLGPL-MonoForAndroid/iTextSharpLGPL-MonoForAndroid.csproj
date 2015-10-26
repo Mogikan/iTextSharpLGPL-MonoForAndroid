@@ -8,7 +8,7 @@
     <ProjectGuid>{EB50C29C-A493-4015-B1EE-E6FF72DF1A55}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>iTextSharpLGPLMonoForAndroid</RootNamespace>
+    <RootNamespace>iTextSharpLGPL.MonoForAndroid</RootNamespace>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
@@ -18,6 +18,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <AndroidUseLatestPlatformSdk />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -1487,6 +1488,14 @@
     <EmbeddedResource Include="iTextSharp\text\pdf\fonts\Times-Roman.afm">
       <LogicalName>iTextSharp.text.pdf.fonts.Times-Roman.afm</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="iTextSharp\text\pdf\fonts\ZapfDingbats.afm" />
+    <EmbeddedResource Include="iTextSharp\text\pdf\fonts\ZapfDingbats.afm">
+      <LogicalName>iTextSharp.text.pdf.fonts.ZapfDingbats.afm</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="iTextSharp\text\pdf\fonts\cjkencodings.properties">
+      <LogicalName>iTextSharp.text.pdf.fonts.cjkencodings.properties</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="iTextSharp\text\pdf\fonts\cjkfonts.properties">
+      <LogicalName>iTextSharp.text.pdf.fonts.cjkfonts.properties</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
