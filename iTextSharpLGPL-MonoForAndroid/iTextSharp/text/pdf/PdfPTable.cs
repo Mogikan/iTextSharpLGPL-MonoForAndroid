@@ -412,7 +412,7 @@ namespace iTextSharp.text.pdf {
 
             SkipColsWithRowspanAbove();
             
-            if (currentRowIdx >= currentRow.Length) {
+            while (currentRowIdx >= currentRow.Length) {
                 int numCols = NumberOfColumns;
                 if (runDirection == PdfWriter.RUN_DIRECTION_RTL) {
                     PdfPCell[] rtlRow = new PdfPCell[numCols];
@@ -435,6 +435,7 @@ namespace iTextSharp.text.pdf {
                 currentRow = new PdfPCell[numCols];
                 currentRowIdx = 0;
                 rowCompleted = true;
+                SkipColsWithRowspanAbove();
             }
             
             if (!cellAdded) {
