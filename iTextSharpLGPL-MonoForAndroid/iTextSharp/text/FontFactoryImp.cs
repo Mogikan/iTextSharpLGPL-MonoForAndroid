@@ -163,7 +163,7 @@ namespace iTextSharp.text {
                 int foundStyle = Font.NORMAL;
                 bool found = false;
                 int resultStyle = style == Font.UNDEFINED ? Font.NORMAL : style;
-                if (resultStyle == Font.NORMAL) 
+                if ((resultStyle & Font.BOLDITALIC) == Font.NORMAL) 
                 {                    
                     //FindExact();
                     foreach (var objectFontName in fontNames)
@@ -193,7 +193,7 @@ namespace iTextSharp.text {
                        foreach (string enumeratedFont in fontNames) {
                            string enumeratedFontLower = enumeratedFont.ToLower(CultureInfo.InvariantCulture);
                            foundStyle = Font.NORMAL;
-                           if (enumeratedFontLower.IndexOf("bold") != -1) foundStyle |= Font.BOLD;
+                           if (enumeratedFontLower.IndexOf("bold") != -1) foundStyle |= Font.BOLD;                           
                            if (enumeratedFontLower.IndexOf("italic") != -1 || enumeratedFontLower.IndexOf("oblique") != -1) foundStyle |= Font.ITALIC;
                            if ((resultStyle & Font.BOLDITALIC) == foundStyle) {
                                fontname = enumeratedFont;
