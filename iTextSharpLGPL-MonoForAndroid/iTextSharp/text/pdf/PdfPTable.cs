@@ -787,7 +787,7 @@ namespace iTextSharp.text.pdf {
                 tmprow = (PdfPRow)rows[idx - rs];
                 cell = tmprow.GetCells()[i];
                 float tmp = 0;
-                if (cell.Rowspan == rs + 1) {
+                if (cell!=null && cell.Rowspan == rs + 1) {
                     tmp = cell.GetMaxHeight();
                     while (rs > 0) {
                         tmp -= GetRowHeight(idx - rs);
