@@ -470,8 +470,9 @@ namespace iTextSharp.text.pdf {
             {
                 return null;
             }
-
-            PdfPCell[] cells = ((PdfPRow)rows[rowIndex]).GetCells();
+            var row = ((PdfPRow)rows[rowIndex]);
+            if (row == null) return null;
+            PdfPCell[] cells = row.GetCells();
             int columnIndex = targetCellColumnIndex;
             if (rowIndex == targetCellRowIndex) //skip if in current row
             {
