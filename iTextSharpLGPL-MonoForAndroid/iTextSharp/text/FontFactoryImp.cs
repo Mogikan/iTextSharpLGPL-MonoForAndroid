@@ -156,37 +156,62 @@ namespace iTextSharp.text {
         /// <returns>a Font object</returns>
         public virtual Font GetFont(string fontname, string encoding, bool embedded, float size, int style, Color color, bool cached) {
             if (fontname == null) return new Font(Font.UNDEFINED, size, style, color);
-            string lowercasefontname = fontname.ToLower(CultureInfo.InvariantCulture);
-            ArrayList tmp = (ArrayList) fontFamilies[lowercasefontname];
-            if (tmp != null) {
+            string lowerCaseFontName = fontname.ToLower(CultureInfo.InvariantCulture);            
+            ArrayList fontNames = (ArrayList) fontFamilies[lowerCaseFontName];            
+            if (fontNames != null) {
                 // some bugs were fixed here by Daniel Marczisovszky
-                int fs = Font.NORMAL;
+                int foundStyle = Font.NORMAL;
                 bool found = false;
-                int s = style == Font.UNDEFINED ? Font.NORMAL : style;
-                foreach (string f in tmp) {
-                    string lcf = f.ToLower(CultureInfo.InvariantCulture);
-                    fs = Font.NORMAL;
-                    if (lcf.ToLower(CultureInfo.InvariantCulture).IndexOf("bold") != -1) fs |= Font.BOLD;
-                    if (lcf.ToLower(CultureInfo.InvariantCulture).IndexOf("italic") != -1 || lcf.ToLower(CultureInfo.InvariantCulture).IndexOf("oblique") != -1) fs |= Font.ITALIC;
-                    if ((s & Font.BOLDITALIC) == fs) {
-                        fontname = f;
-                        found = true;
-                        break;
+                int resultStyle = style == Font.UNDEFINED ? Font.NORMAL : style;
+                if (resultStyle == Font.NORMAL) 
+                {                    
+                    //FindExact();
+                    foreach (var objectFontName in fontNames)
+                    {
+                        string enumeratedFontName = ((string)objectFontName);
+                        string fontNameLower = enumeratedFontName.ToLower(CultureInfo.InvariantCulture);
+                        if (fontNameLower == lowerCaseFontName)
+                        {
+                            found = true;
+                            fontname = enumeratedFontName;
+                        }
                     }
+                    //FindRegular();
+                    foreach (string enumeratedFontName in fontNames)
+                    {
+                        string fontNameLower = enumeratedFontName.ToLower(CultureInfo.InvariantCulture);
+                        if (!fontNameLower.Contains("bold") && !fontNameLower.Contains("italic") && fontNameLower.Contains("regular"))
+                        {
+                            found = true;
+                            fontname = enumeratedFontName;
+                        }
+                    }
+                    //Any
                 }
+                    if (!found)
+                    {
+                       foreach (string enumeratedFont in fontNames) {
+                           string enumeratedFontLower = enumeratedFont.ToLower(CultureInfo.InvariantCulture);
+                           foundStyle = Font.NORMAL;
+                           if (enumeratedFontLower.IndexOf("bold") != -1) foundStyle |= Font.BOLD;
+                           if (enumeratedFontLower.IndexOf("italic") != -1 || enumeratedFontLower.IndexOf("oblique") != -1) foundStyle |= Font.ITALIC;
+                           if ((resultStyle & Font.BOLDITALIC) == foundStyle) {
+                               fontname = enumeratedFont;
+                               found = true;
+                               break;
+                           }
+                       }
+                    }
                 if (style != Font.UNDEFINED && found) {
-                    style &= ~fs;
+                    style &= ~foundStyle;
                 }
             }
             BaseFont basefont = null;
             try {
-                try {
-                    // the font is a type 1 font or CJK font
-                    basefont = BaseFont.CreateFont(fontname, encoding, embedded, cached, null, null, true);
-                }
-                catch (DocumentException) {
-                }
-                if (basefont == null) {
+               
+                 // the font is a type 1 font or CJK font
+                basefont = BaseFont.CreateFont(fontname, encoding, embedded, cached, null, null, true);
+                 if (basefont == null) {
                     // the font is a true type font or an unknown font
                     fontname = trueTypeFonts[fontname.ToLower(CultureInfo.InvariantCulture)];
                     // the font is not registered as truetype font
