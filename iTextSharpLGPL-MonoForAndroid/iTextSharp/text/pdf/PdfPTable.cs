@@ -463,44 +463,61 @@ namespace iTextSharp.text.pdf {
         * @return   true if there's a cell above that belongs to a rowspan
         * @since    2.1.6
         */
-        internal bool RowSpanAbove(int currRow, int currCol) {
-            
-            if ((currCol >= NumberOfColumns) 
-                    || (currCol < 0) 
-                    || (currRow == 0))
-                return false;
-            
-            int row = currRow - 1;
-            PdfPRow aboveRow = (PdfPRow)rows[row];
-            if (aboveRow == null)
-                return false;
-            PdfPCell aboveCell = (PdfPCell)aboveRow.GetCells()[currCol];
-            while ((aboveCell == null) && (row > 0)) {
-                aboveRow  = (PdfPRow)rows[--row];
-                aboveCell = (PdfPCell)aboveRow.GetCells()[currCol];
+        private PdfPCell FindHostCellLeft(int rowIndex, int targetCellRowIndex, int targetCellColumnIndex)
+        {
+            if (rowIndex >= rows.Count)
+            {
+                return null;
             }
-            
-            int distance = currRow - row;
 
-            if (aboveCell == null) {
-                int col = currCol - 1;
-                aboveCell = (PdfPCell)aboveRow.GetCells()[col];
-                while ((aboveCell == null) && (row > 0))
-                    aboveCell = (PdfPCell)aboveRow.GetCells()[--col];
-                return aboveCell != null && aboveCell.Rowspan > distance;
+            PdfPCell[] cells = ((PdfPRow)rows[rowIndex]).GetCells();
+            int columnIndex = targetCellColumnIndex;
+            if (rowIndex == targetCellRowIndex) //skip if in current row
+            {
+                columnIndex--;
             }
-            
-            if ((aboveCell.Rowspan == 1) && (distance > 1)) {
-                int col = currCol - 1;
-                aboveRow = (PdfPRow)rows[row + 1];
-                distance--;
-                aboveCell = (PdfPCell)aboveRow.GetCells()[col];
-                while ((aboveCell == null) && (col > 0))
-                    aboveCell = (PdfPCell)aboveRow.GetCells()[--col];
+            while (columnIndex >= 0)
+            {
+                if (cells[columnIndex] != null
+                    && cells[columnIndex].Colspan > targetCellColumnIndex - columnIndex
+                    && cells[columnIndex].Rowspan > targetCellRowIndex - rowIndex)
+                {
+                    return cells[columnIndex];
+                }
+                columnIndex--;
             }
-            
-            return aboveCell != null && aboveCell.Rowspan > distance;
+            return null;
         }
+
+        private PdfPCell FindHostCellAbove(int targetCellRowIndex, int targetCellColumnIndex)
+        {
+            var result = FindHostCellLeft(targetCellRowIndex, targetCellRowIndex, targetCellColumnIndex);//find in current row
+            if (result != null)
+            {
+                return result;
+            }
+            var rowCounter = targetCellRowIndex - 1;
+            while (rowCounter >= 0)
+            {
+                result = FindHostCellLeft(rowCounter, targetCellRowIndex, targetCellColumnIndex);
+                if (result != null)
+                {
+                    return result;
+                }
+                rowCounter--;
+            }
+            return null;
+        }      
+
+        internal bool RowSpanAbove(int currRow, int currCol)
+        {
+            if (currCol > NumberOfColumns - 1 || currRow < 1)
+            {
+                return false;
+            }
+            var aboveCell = FindHostCellAbove(currRow, currCol);
+            return aboveCell != null;
+        }      
         
         /** Adds a cell element.
         * @param text the text for the cell
