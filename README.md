@@ -1,16 +1,7 @@
-iTextSharpLGPL-MonoForAndroid
+iTextSharpLGPL-Net standard 2.0
 ========================
-This project is taking the last version of iTextSharp which was licenced with LGPL and making it work with Mono For Android.  
-
-The challenge is that not all of System.Drawing is implemented in Mono for Android.  There is some in Mono.Android and some similar classes in OpenTK, but they are missing some needed classes.
-
-Missing System.Drawing classes are:
-System.Drawing.Image
-System.Drawing.Imaging.ImageFormat
-System.Drawing.Drawing2d.Matrix
-System.Drawing.Bitmap
-
-To get the solution to compile, I have added these bare-bone versions of these classes in the SystemDrawingDummy folder.  These have just the bare minimal amount of code to get it compile.  This worked for my needs which include vector images, but you will need a fuller implementation to get things like bitmap images to work.
+This project is taking the last version of iTextSharp which was licenced with LGPL and making it work with Net standard 2.0.
+Project is tested on both Android and iOS
 
 Changes to code:
 - Added setter to the Chunk Content.  (This was a custom need.) 
